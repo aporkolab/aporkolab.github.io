@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f2fb">
+  <meta name="description" content="Bugs in production? Grab a tiny hammer. A cute, slightly chaotic browser arcade by Ádám Porkoláb.">
+  <title>Whack-a-Bug! — aporkolab's tiny dev arcade</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#game-board">Skip to game</a>
+  <header class="site-header">
+    <a href="./" class="brand" aria-label="Whack-a-Bug home"><span class="brand-face" aria-hidden="true"><i></i><i></i><b></b></span><span>aporkolab<span class="brand-suffix">.play</span></span></a>
+    <span class="header-note">small games. questionable engineering.</span>
+    <nav aria-label="Game utilities"><button id="sound" class="round-button" aria-pressed="false" aria-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></svg></button><button id="help" class="round-button" aria-label="How to play">?</button><a href="https://github.com/aporkolab" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <span>↗</span></a></nav>
+  </header>
+
+  <main class="playground">
+    <section class="intro" aria-labelledby="game-title">
+      <div class="tiny-label"><span class="asterisk" aria-hidden="true">✳</span> A TINY DEV ARCADE</div>
+      <h1 id="game-title"><span class="whack-word">Whack</span><br>a<span class="title-dash">-</span><span class="bug-word">bug<svg viewBox="0 0 250 24" aria-hidden="true"><path d="M6 13Q71 0 128 12T243 9M20 22Q127 10 224 20"/></svg></span><span class="title-dot">!</span></h1>
+      <p class="tagline">They said it was a small fix.</p>
+      <p class="instructions"><strong>Bonk the bugs. Spare the bots.</strong><br><span id="intro-seconds">45</span> seconds of perfectly normal<br class="desktop-break"> software development.</p>
+      <div class="mode-select" role="group" aria-label="Difficulty"><button data-mode="normal" aria-pressed="true">Ship it <span>45s</span></button><button data-mode="chill" aria-pressed="false">Chill mode <span>60s</span></button></div>
+      <button id="start" class="primary-button">Let's debug <span aria-hidden="true">↗</span></button>
+      <p class="input-hint">Click, tap, or use <kbd>Q</kbd><kbd>W</kbd><kbd>E</kbd>…</p>
+      <div class="doodle-note"><svg viewBox="0 0 62 57" aria-hidden="true"><path d="M54 6C58 38 10 46 8 18m-6 8 6-10 11 6"/></svg><span>finally, a bug<br>you can hit.</span></div>
+      <div class="personal-best"><span aria-hidden="true">✦</span> YOUR BEST <strong id="best-side">0000</strong></div>
+    </section>
+
+    <section class="game-scene" aria-label="Whack-a-Bug arcade machine">
+      <div class="sticker" aria-hidden="true">works on<br>my machine<span>™</span></div>
+      <svg class="scene-spark spark-one" viewBox="0 0 45 45" aria-hidden="true"><path d="M22 2q0 20 20 20-20 0-20 20 0-20-20-20 20 0 20-20Z"/></svg>
+      <div class="machine" id="machine">
+        <div class="machine-top"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>localhost:3000</span><span class="build-label"><i></i> probably fine</span></div>
+        <div class="scoreboard" aria-label="Scoreboard"><div><span>SCORE</span><strong id="score">0000</strong></div><div class="time-block"><span>TIME LEFT</span><strong id="timer">45<span>s</span></strong></div><div><span>BEST STREAK</span><strong id="streak">00<span>×</span></strong></div></div>
+        <div class="game-message"><span id="message">Your production environment awaits.</span><span id="combo" class="combo" hidden>×1</span></div>
+        <div id="game-board" class="game-board" role="group" aria-label="Nine keys. Bonk coral and purple bugs; spare mint robots." tabindex="-1"></div>
+        <div class="machine-bottom"><button id="assist" class="assist-button" disabled aria-label="Bot buddy. Catch six bugs to charge."><span class="assist-face" aria-hidden="true">⌁</span><span><strong>BOT BUDDY</strong><small id="assist-label">Catch 6 bugs to charge</small></span><span id="charge-dots" class="charge-dots" aria-hidden="true"></span><kbd>SPACE</kbd></button><button id="pause" class="pause-button" aria-label="Pause game" disabled><span>Ⅱ</span></button></div>
+        <div class="case-bottom"><span>DO NOT FEED AFTER DEPLOY</span><span class="speaker" aria-hidden="true">▥▥▥</span><span>BUG-01</span></div>
+        <div id="board-overlay" class="board-overlay" hidden><div><span id="overlay-symbol" aria-hidden="true">☕</span><h2 id="overlay-title">Coffee break.</h2><p id="overlay-copy">Even production can wait.</p><button id="resume" class="primary-button">Back to bugs <span>↗</span></button></div></div>
+      </div>
+      <div class="board-shadow" aria-hidden="true"></div>
+      <div class="character-legend" aria-label="Character points"><div><span id="legend-bug"></span><p><strong>THE BUG</strong><small>Bonk. +10</small></p></div><div><span id="legend-bonus"></span><p><strong>RARE BUG</strong><small>Quick! +25</small></p></div><div><span id="legend-bot"></span><p><strong>GOOD BOT</strong><small>Friend. −20 if hit.</small></p></div></div>
+      <svg class="scene-spark spark-two" viewBox="0 0 45 45" aria-hidden="true"><path d="M22 2q0 20 20 20-20 0-20 20 0-20-20-20 20 0 20-20Z"/></svg>
+    </section>
+  </main>
+
+  <footer><p>Made with a human, a few AIs, and a suspicious number of bugs.<br><a href="https://github.com/aporkolab" target="_blank" rel="noopener noreferrer">Ádám Porkoláb ↗</a></p><span class="footer-note">no stand-up meeting required.</span></footer>
+  <div id="cursor-mallet" aria-hidden="true"></div>
+  <div id="particles" aria-hidden="true"></div>
+  <div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
+
+  <dialog id="help-dialog" aria-labelledby="help-title"><button class="close-button" data-close="help-dialog" aria-label="Close instructions">×</button><span class="tiny-label">README, BUT MAKE IT SHORT</span><h2 id="help-title">It's hammer time.</h2><p>Coral bugs are worth <strong>10 points</strong>. Purple bugs are worth <strong>25</strong>. Mint robots are friends: hitting one costs <strong>20 points</strong>.</p><p>Every five bugs in a row adds a multiplier, up to <strong>5×</strong>. A missed bug, an empty key or a bonked bot breaks the streak. An empty hit costs 5 points.</p><p>Catch six bugs to charge <strong>Bot Buddy</strong>. Press <kbd>Space</kbd> or the buddy button to clear the bugs on screen. Your robot friends are safe.</p><div class="key-guide" aria-label="Keyboard controls"><span><kbd>Q</kbd><kbd>W</kbd><kbd>E</kbd></span><span><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span><kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd></span></div><p class="small-print">Click or tap works too. <kbd>P</kbd> pauses. Chill mode gives you slower bugs and a full minute. Scores stay in this browser.</p><button id="help-play" class="primary-button">Got it. Give me bugs. <span>↗</span></button></dialog>
+  <dialog id="result-dialog" aria-labelledby="result-title"><button class="close-button" data-close="result-dialog" aria-label="Close results">×</button><div id="result-mascot" class="result-mascot"></div><span class="tiny-label" id="result-badge">DEPLOYMENT COMPLETE. SORT OF.</span><h2 id="result-title">Well bonked.</h2><div class="final-score"><strong id="final-score">0000</strong><span>POINTS</span></div><p id="result-joke">There are probably still bugs. There always are.</p><div class="result-stats"><span><strong id="final-hits">0</strong>BUGS BONKED</span><span><strong id="final-combo">0</strong>BEST STREAK</span><span><strong id="final-bots">0</strong>BOTS BONKED</span></div><button id="again" class="primary-button">Just one more fix <span>↗</span></button><button id="share" class="share-button">Copy my score ↗</button><p id="share-feedback" class="small-print" role="status"></p></dialog>
+  <noscript><p class="noscript">These bugs need JavaScript to escape. Enable it to play.</p></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
