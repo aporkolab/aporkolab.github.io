@@ -12,7 +12,7 @@
 <body>
   <a class="skip-link" href="#game-board">Skip to game</a>
   <header class="site-header">
-    <a href="./" class="brand" aria-label="Whack-a-Bug home"><span class="brand-face" aria-hidden="true"><i></i><i></i><b></b></span><span>aporkolab<span class="brand-suffix">.play</span></span></a>
+    <a href="./" class="brand" aria-label="aporkolab.play, Whack-a-Bug home"><span class="brand-face" aria-hidden="true"><i></i><i></i><b></b></span><span>aporkolab<span class="brand-suffix">.play</span></span></a>
     <span class="header-note">small games. questionable engineering.</span>
     <nav aria-label="Game utilities"><button id="sound" class="round-button" aria-pressed="false" aria-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></svg></button><button id="help" class="round-button" aria-label="How to play">?</button><a href="https://github.com/aporkolab" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <span>↗</span></a></nav>
   </header>
@@ -38,7 +38,7 @@
         <div class="scoreboard" aria-label="Scoreboard"><div><span>SCORE</span><strong id="score">0000</strong></div><div class="time-block"><span>TIME LEFT</span><strong id="timer">45<span>s</span></strong></div><div><span>BEST STREAK</span><strong id="streak">00<span>×</span></strong></div></div>
         <div class="game-message"><span id="message">Your production environment awaits.</span><span id="combo" class="combo" hidden>×1</span></div>
         <div id="game-board" class="game-board" role="group" aria-label="Nine keys. Bonk coral and purple bugs; spare mint robots." tabindex="-1"></div>
-        <div class="machine-bottom"><button id="assist" class="assist-button" disabled aria-label="Bot buddy. Catch six bugs to charge."><span class="assist-face" aria-hidden="true">⌁</span><span><strong>BOT BUDDY</strong><small id="assist-label">Catch 6 bugs to charge</small></span><span id="charge-dots" class="charge-dots" aria-hidden="true"></span><kbd>SPACE</kbd></button><button id="pause" class="pause-button" aria-label="Pause game" disabled><span>Ⅱ</span></button></div>
+        <div class="machine-bottom"><button id="assist" class="assist-button" disabled><span class="assist-face" aria-hidden="true">⌁</span><span><strong>BOT BUDDY</strong><small id="assist-label">Catch 6 bugs to charge</small></span><span id="charge-dots" class="charge-dots" aria-hidden="true"></span><kbd aria-hidden="true">SPACE</kbd></button><button id="pause" class="pause-button" aria-label="Pause game" disabled><span>Ⅱ</span></button></div>
         <div class="case-bottom"><span>DO NOT FEED AFTER DEPLOY</span><span class="speaker" aria-hidden="true">▥▥▥</span><span>BUG-01</span></div>
         <div id="board-overlay" class="board-overlay" hidden><div><span id="overlay-symbol" aria-hidden="true">☕</span><h2 id="overlay-title">Coffee break.</h2><p id="overlay-copy">Even production can wait.</p><button id="resume" class="primary-button">Back to bugs <span>↗</span></button></div></div>
       </div>

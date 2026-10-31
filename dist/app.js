@@ -5,7 +5,9 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const keyMap = ['q','w','e','a','s','d','z','x','c'];
 const board = $('#game-board');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Read on use so a changed OS setting applies without a reload.
+const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+const prefersReducedMotion = () => reducedMotionQuery.matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const clock = () => performance.now();
 let game = createGame();
@@ -65,7 +67,7 @@ function updateSound() {
 }
 $('#sound').addEventListener('click',() => { soundOn=!soundOn; updateSound(); playSound('bonus'); });
 
-board.innerHTML = keyMap.map((key,index) => `<button class="hole" data-slot="${index}" aria-label="${key.toUpperCase()} key, empty"><span class="well"></span><span class="creature-window"><span class="character"></span></span><span class="target-label">+25</span><span class="key-front"><span class="key-letter">${key.toUpperCase()}</span></span></button>`).join('');
+board.innerHTML = keyMap.map((key,index) => `<button class="hole" data-slot="${index}" aria-label="${key.toUpperCase()} key, empty"><span class="well"></span><span class="creature-window"><span class="character"></span></span><span class="target-label" aria-hidden="true">+25</span><span class="key-front"><span class="key-letter">${key.toUpperCase()}</span></span></button>`).join('');
 const holes = $$('.hole');
 $('#legend-bug').innerHTML = character('bug');
 $('#legend-bonus').innerHTML = character('bonus');
@@ -104,7 +106,7 @@ function newGame() {
   announce('Game started. Bonk coral and purple bugs. Spare mint robots.');
   render();
   board.focus({preventScroll:true});
-  if (window.innerWidth < 681) $('#machine').scrollIntoView({behavior:reducedMotion?'instant':'smooth',block:'center'});
+  if (window.innerWidth < 681) $('#machine').scrollIntoView({behavior:prefersReducedMotion()?'instant':'smooth',block:'center'});
 }
 $('#start').addEventListener('click',() => {
   if (game.status==='paused') { resume(game); message('Back to perfectly normal development.'); render(); board.focus({preventScroll:true}); }
@@ -124,7 +126,7 @@ function popScore(index,text,bad=false) {
   holes[index].append(span); later(() => span.remove(),850);
 }
 function burst(index,bonus=false) {
-  if (reducedMotion) return;
+  if (prefersReducedMotion()) return;
   const rect=holes[index].getBoundingClientRect();
   const x=rect.left+rect.width/2; const y=rect.top+rect.height*.35;
   const colors=bonus?['#b796df','#ee97b1','#a8d9bd']:['#f09a92','#d6b5ef','#a8d9bd','#efe1fa'];
@@ -137,7 +139,7 @@ function burst(index,bonus=false) {
   }
 }
 function cheer(text) {
-  if(reducedMotion){message(text);return;}
+  if(prefersReducedMotion()){message(text);return;}
   const rect=board.getBoundingClientRect();
   const element=document.createElement('span'); element.className='cheer';element.textContent=text;
   element.style.left=`${rect.left+rect.width/2}px`;element.style.top=`${rect.top+rect.height*.45}px`;
@@ -218,7 +220,7 @@ function showResult() {
   if(resultShown)return;
   resultShown=true;playSound('end');
   const record=game.score>best;
-  if(record){best=game.score;try{localStorage.setItem(`whack-a-bug:best:${game.mode}`,String(best));}catch{}}
+  if(record){best=game.score;try{localStorage.setItem(`whack-a-bug:best:${game.mode}`,String(best));}catch{/* Storage blocked: keep the in-memory best. */}}
   $('#result-mascot').innerHTML=character(game.score>=300?'bonus':'bug');
   setText('#result-badge',record?'NEW PERSONAL BEST! NICE BONKING.':'DEPLOYMENT COMPLETE. SORT OF.');
   setText('#result-title',game.score>=1000?'You absolute bug menace.':game.score>=500?'Certified bug bonker.':game.score>=150?'Well bonked.':'It works on your machine.');
@@ -273,12 +275,15 @@ function render() {
   const ready=game.charge>=6&&game.status==='playing';
   $('#assist').disabled=!ready;
   $('#assist').classList.toggle('ready',ready);
-  $('#assist').setAttribute('aria-label',ready?'Bot Buddy charged. Clear all visible bugs.':`Bot Buddy. ${game.charge} of six charge.`);
   setText('#assist-label',ready?'Ready! Tap or press Space':`Catch ${6-game.charge} bug${6-game.charge===1?'':'s'} to charge`);
   $$('#charge-dots i').forEach((dot,index) => dot.classList.toggle('filled',index<game.charge));
   $('#combo').hidden=game.combo<5;
   setText('#combo',`${game.multiplier}×`);
-  $('#board-overlay').hidden=!(game.status==='paused'||game.status==='over');
+  const overlay=game.status==='paused'||game.status==='over';
+  $('#board-overlay').hidden=!overlay;
+  // Keys under the overlay must not stay reachable by Tab.
+  if(overlay&&board.contains(document.activeElement))$('#resume').focus({preventScroll:true});
+  board.inert=overlay;
   if(game.status==='over'){
     setText('#overlay-symbol','✦');setText('#overlay-title','One more fix?');setText('#overlay-copy',`${game.score} points. The bugs will be back.`);
     $('#resume').innerHTML='Play again <span>↗</span>';
@@ -289,7 +294,7 @@ function render() {
   if(clock()>messageUntil){
     setText('#message',game.status==='ready'?'Your production environment awaits.':game.status==='playing'?(game.remaining<10?'Last push. Definitely no new bugs.':game.charge>=6?'Your bot buddy is ready!':'Bonk bugs. Protect robot feelings.'):game.status==='paused'?'No bugs escaped during your break.':'Time to write the incident report.');
   }
-  if(finePointer&&!reducedMotion)$('#cursor-mallet').style.display=isOnBoard&&game.status==='playing'&&!$$('dialog').some(dialog=>dialog.open)?'block':'none';
+  if(finePointer&&!prefersReducedMotion())$('#cursor-mallet').style.display=isOnBoard&&game.status==='playing'&&!$$('dialog').some(dialog=>dialog.open)?'block':'none';
 }
 
 board.addEventListener('pointerenter',event => { if(event.pointerType==='mouse'){isOnBoard=true;render();} });
