@@ -141,6 +141,8 @@ export function hit(game, index) {
   if (game.status !== 'playing' || !Number.isInteger(index) || index < 0 || index >= game.slots.length) return null;
   const target = game.slots[index];
   if (isTarget(target)) return successfulHit(game, index, false);
+  // Unknown occupants are inert: they must not break the combo either.
+  if (target && !TYPES.has(target.type)) return null;
   resetCombo(game);
   if (target?.type === 'bot') {
     game.slots[index] = null;
@@ -148,7 +150,6 @@ export function hit(game, index) {
     game.score = Math.max(0, game.score - 20);
     return emit(game, 'bot-hit', { slot: index, targetType: 'bot', targetId: target.id, points: -20, combo: 0, text: 'Friendly bot! −20' });
   }
-  if (target && !TYPES.has(target.type)) return null;
   game.misses += 1;
   game.score = Math.max(0, game.score - 5);
   return emit(game, 'empty', { slot: index, points: -5, combo: 0, text: 'Empty slot. −5' });

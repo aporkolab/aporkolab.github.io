@@ -220,3 +220,15 @@ test('invalid times, seeds, modes and hole indices cannot corrupt state', () => 
   for (const index of [NaN, Infinity, -1, 9, 0.5, '0', undefined]) assert.equal(hit(game, index), null);
   assert.deepEqual(game, before);
 });
+
+test('unknown slot occupants are inert and keep the combo intact', () => {
+  const game = playing({ seed: 9 });
+  game.slots.fill(null);
+  expose(game, 0);
+  hit(game, 0);
+  game.slots[1] = { id: 999, type: 'mystery', born: game.elapsed, expires: game.elapsed + 3 };
+  const before = { score: game.score, combo: game.combo, misses: game.misses, events: game.events.length };
+  assert.equal(hit(game, 1), null);
+  assert.deepEqual({ score: game.score, combo: game.combo, misses: game.misses, events: game.events.length }, before);
+  assert.equal(game.slots[1].type, 'mystery');
+});
