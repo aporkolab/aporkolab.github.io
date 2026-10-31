@@ -220,7 +220,7 @@ function showResult() {
   if(resultShown)return;
   resultShown=true;playSound('end');
   const record=game.score>best;
-  if(record){best=game.score;try{localStorage.setItem(`whack-a-bug:best:${game.mode}`,String(best));}catch{}}
+  if(record){best=game.score;try{localStorage.setItem(`whack-a-bug:best:${game.mode}`,String(best));}catch{/* Storage blocked: keep the in-memory best. */}}
   $('#result-mascot').innerHTML=character(game.score>=300?'bonus':'bug');
   setText('#result-badge',record?'NEW PERSONAL BEST! NICE BONKING.':'DEPLOYMENT COMPLETE. SORT OF.');
   setText('#result-title',game.score>=1000?'You absolute bug menace.':game.score>=500?'Certified bug bonker.':game.score>=150?'Well bonked.':'It works on your machine.');
